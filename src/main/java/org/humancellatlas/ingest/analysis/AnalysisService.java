@@ -47,7 +47,7 @@ public class AnalysisService {
             else {
                 getLog().warn(String.format(
                         "No Bundle Manifest present with bundle UUID '%s' - in future this will cause a critical error",
-                        uuid.getUuid()));
+                        uuid.getName()));
             }
         }
         return analysisRepository.save(analysis);

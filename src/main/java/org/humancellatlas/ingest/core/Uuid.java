@@ -13,15 +13,15 @@ import java.util.UUID;
  */
 @Data
 public class Uuid {
-    private String uuid;
+    private String name;
 
     @JsonCreator
     public Uuid(String name) {
         // throws IllegalArgumentException if not valid
-        this.uuid = UUID.fromString(name).toString();
+        this.name = UUID.fromString(name).toString();
     }
 
     public Uuid() {
-        this.uuid = UUID.randomUUID().toString();
+        this.name = UUID.randomUUID().toString();
     }
 }

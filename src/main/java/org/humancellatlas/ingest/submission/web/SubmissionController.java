@@ -55,8 +55,8 @@ public class SubmissionController {
 
     @RequestMapping(path = "/submissionEnvelopes/{sub_id}/analyses", method = RequestMethod.GET)
     ResponseEntity<?> getAnalyses(@PathVariable("sub_id") SubmissionEnvelope submissionEnvelope,
-                                             Pageable pageable,
-                                             final PersistentEntityResourceAssembler resourceAssembler) {
+                                  Pageable pageable,
+                                  final PersistentEntityResourceAssembler resourceAssembler) {
         Page<Analysis> analyses = getAnalysisRepository().findBySubmissionEnvelope(submissionEnvelope, pageable);
         return ResponseEntity.ok(getPagedResourcesAssembler().toResource(analyses, resourceAssembler));
     }
