@@ -1,7 +1,8 @@
 package org.humancellatlas.ingest.envelope;
 
-import org.humancellatlas.ingest.core.Uuid;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.UUID;
 
 /**
  * Javadocs go here!
@@ -10,5 +11,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @date 31/08/17
  */
 public interface SubmissionEnvelopeRepository extends MongoRepository<SubmissionEnvelope, String> {
-    public SubmissionEnvelope findByUuid(Uuid uuid);
+    public SubmissionEnvelope findByUuid(UUID uuid);
 }

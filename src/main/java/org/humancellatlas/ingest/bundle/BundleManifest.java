@@ -10,6 +10,7 @@ import org.springframework.hateoas.Identifiable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by rolando on 05/09/2017.
@@ -19,12 +20,12 @@ import java.util.Map;
 public class BundleManifest implements Identifiable<String> {
     private @Id @JsonIgnore String id;
 
-    private final Uuid bundleUuid;
+    private final UUID bundleUuid;
 
-    private final List<Uuid> fileUuids;
-    private final Map<Uuid, Collection<Uuid>> fileSampleMap;
-    private final Map<Uuid, Collection<Uuid>> fileAssayMap;
-    private final Map<Uuid, Collection<Uuid>> fileAnalysisMap;
-    private final Map<Uuid, Collection<Uuid>> fileProjectMap;
-    private final Map<Uuid, Collection<Uuid>> fileProtocolMap;
+    private final List<UUID> fileUuids;
+    private final Map<UUID, Collection<UUID>> fileSampleMap;
+    private final Map<UUID, Collection<UUID>> fileAssayMap;
+    private final Map<UUID, Collection<UUID>> fileAnalysisMap;
+    private final Map<UUID, Collection<UUID>> fileProjectMap;
+    private final Map<UUID, Collection<UUID>> fileProtocolMap;
 }

@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Javadocs go here!
@@ -39,7 +40,7 @@ public class Analysis extends BioMetadataDocument {
     }
 
     public Analysis(EntityType type,
-                    Uuid uuid,
+                    UUID uuid,
                     SubmissionDate submissionDate,
                     UpdateDate updateDate,
                     Accession accession,

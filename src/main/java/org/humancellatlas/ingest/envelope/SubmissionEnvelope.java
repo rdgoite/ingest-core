@@ -1,20 +1,15 @@
 package org.humancellatlas.ingest.envelope;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-import org.humancellatlas.ingest.analysis.Analysis;
-import org.humancellatlas.ingest.core.*;
-import org.humancellatlas.ingest.assay.Assay;
-import org.humancellatlas.ingest.file.File;
-import org.humancellatlas.ingest.project.Project;
-import org.humancellatlas.ingest.protocol.Protocol;
-import org.humancellatlas.ingest.sample.Sample;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.humancellatlas.ingest.core.AbstractEntity;
+import org.humancellatlas.ingest.core.EntityType;
+import org.humancellatlas.ingest.core.SubmissionDate;
+import org.humancellatlas.ingest.core.SubmissionStatus;
+import org.humancellatlas.ingest.core.UpdateDate;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Javadocs go here!
@@ -26,7 +21,7 @@ import java.util.List;
 public class SubmissionEnvelope extends AbstractEntity {
     private @Setter SubmissionStatus submissionStatus;
 
-    public SubmissionEnvelope(Uuid uuid,
+    public SubmissionEnvelope(UUID uuid,
                               SubmissionDate submissionDate,
                               UpdateDate updateDate,
                               SubmissionStatus submissionStatus) {

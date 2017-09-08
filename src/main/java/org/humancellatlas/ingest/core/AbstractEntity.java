@@ -8,6 +8,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.hateoas.Identifiable;
 
+import java.util.UUID;
+
 /**
  * Javadocs go here!
  *
@@ -22,12 +24,12 @@ public abstract class AbstractEntity implements Identifiable<String> {
 
     private final @JsonIgnore EntityType type;
 
-    private Uuid uuid;
+    private UUID uuid;
     private final SubmissionDate submissionDate;
     private final UpdateDate updateDate;
 
     protected AbstractEntity(EntityType type,
-                             Uuid uuid,
+                             UUID uuid,
                              SubmissionDate submissionDate,
                              UpdateDate updateDate) {
         this.type = type;
@@ -36,7 +38,7 @@ public abstract class AbstractEntity implements Identifiable<String> {
         this.updateDate = updateDate;
     }
 
-    public void setUuid(Uuid uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 }

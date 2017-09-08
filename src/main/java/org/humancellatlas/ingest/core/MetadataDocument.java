@@ -1,7 +1,8 @@
 package org.humancellatlas.ingest.core;
 
 import lombok.Getter;
-import lombok.Setter;
+
+import java.util.UUID;
 
 /**
  * Javadocs go here!
@@ -14,7 +15,7 @@ public abstract class MetadataDocument extends AbstractEntity {
     private final Object content;
 
     protected MetadataDocument(EntityType type,
-                               Uuid uuid,
+                               UUID uuid,
                                SubmissionDate submissionDate,
                                UpdateDate updateDate,
                                Object content) {

@@ -2,17 +2,17 @@ package org.humancellatlas.ingest.project;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-import org.humancellatlas.ingest.core.*;
 import org.humancellatlas.ingest.core.Accession;
+import org.humancellatlas.ingest.core.BioMetadataDocument;
 import org.humancellatlas.ingest.core.EntityType;
-import org.humancellatlas.ingest.core.MetadataDocument;
 import org.humancellatlas.ingest.core.SubmissionDate;
 import org.humancellatlas.ingest.core.UpdateDate;
-import org.humancellatlas.ingest.core.Uuid;
+import org.humancellatlas.ingest.core.ValidationStatus;
 import org.humancellatlas.ingest.envelope.SubmissionEnvelope;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Javadocs go here!
@@ -25,12 +25,18 @@ public class Project extends BioMetadataDocument {
     private @DBRef SubmissionEnvelope submissionEnvelope;
 
     protected Project() {
-        super(EntityType.PROJECT, null, new SubmissionDate(new Date()), new UpdateDate(new Date()), null, null, ValidationStatus.PENDING);
+        super(EntityType.PROJECT,
+              null,
+              new SubmissionDate(new Date()),
+              new UpdateDate(new Date()),
+              null,
+              null,
+              ValidationStatus.PENDING);
         this.submissionEnvelope = null;
     }
 
     public Project(EntityType type,
-                   Uuid uuid,
+                   UUID uuid,
                    SubmissionDate submissionDate,
                    UpdateDate updateDate,
                    Accession accession,
@@ -43,7 +49,14 @@ public class Project extends BioMetadataDocument {
 
     @JsonCreator
     public Project(Object content) {
-        this(EntityType.PROJECT, null, new SubmissionDate(new Date()), new UpdateDate(new Date()), null, null, content, ValidationStatus.PENDING);
+        this(EntityType.PROJECT,
+             null,
+             new SubmissionDate(new Date()),
+             new UpdateDate(new Date()),
+             null,
+             null,
+             content,
+             ValidationStatus.PENDING);
     }
 
     public Project addToSubmissionEnvelope(SubmissionEnvelope submissionEnvelope) {

@@ -5,12 +5,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.humancellatlas.ingest.bundle.BundleManifest;
 import org.humancellatlas.ingest.bundle.BundleManifestRepository;
-import org.humancellatlas.ingest.core.Uuid;
 import org.humancellatlas.ingest.envelope.SubmissionEnvelope;
 import org.humancellatlas.ingest.envelope.SubmissionEnvelopeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * Javadocs go here!
@@ -39,7 +40,7 @@ public class AnalysisService {
 
     public Analysis resolveBundleReferencesForAnalysis(Analysis analysis, BundleReference bundleReference) {
         for (String bundleUuid : bundleReference.getBundleUuids()) {
-            Uuid uuid = new Uuid(bundleUuid);
+            UUID uuid = UUID.fromString(bundleUuid);
             BundleManifest bundleManifest = getBundleManifestRepository().findByBundleUuid(uuid);
             if (bundleManifest != null) {
                 getLog().info("Adding bundle manifest link to analysis '%s'", analysis.getId());
@@ -47,7 +48,7 @@ public class AnalysisService {
             else {
                 getLog().warn(String.format(
                         "No Bundle Manifest present with bundle UUID '%s' - in future this will cause a critical error",
-                        uuid.getUuid()));
+                        uuid.toString()));
             }
         }
         return analysisRepository.save(analysis);
