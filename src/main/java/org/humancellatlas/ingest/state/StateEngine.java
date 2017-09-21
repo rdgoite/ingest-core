@@ -17,6 +17,7 @@ import org.humancellatlas.ingest.submission.SubmissionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
@@ -90,14 +91,16 @@ public class StateEngine {
         }
 
         final Event event = new SubmissionEvent(submissionEnvelope.getSubmissionState(), targetState);
-        executorService.submit(() -> {
+        try {
             submissionEnvelope.addEvent(event).enactStateTransition(targetState);
 
             getSubmissionEnvelopeRepository().save(submissionEnvelope);
 
             // is this an event that needs to be posted to a queue?
             postMessageIfRequired(submissionEnvelope, targetState);
-        });
+        } catch (OptimisticLockingFailureException e) {
+            // todo something
+        }
         return event;
     }
 
@@ -113,14 +116,16 @@ public class StateEngine {
         }
 
         final Event event = new ValidationEvent(metadataDocument.getValidationState(), targetState);
-        executorService.submit(() -> {
+        try {
             metadataDocument.addEvent(event).enactStateTransition(targetState);
 
             repository.save(metadataDocument);
 
             // is this an event that needs to be posted to a queue?
             postMessageIfRequired(metadataDocument, targetState);
-        });
+        } catch (OptimisticLockingFailureException e) {
+            //todo something
+        }
         return event;
 
     }
@@ -139,8 +144,10 @@ public class StateEngine {
                                                                  MetadataDocument metadataDocument) {
         postMessageIfRequired(metadataDocument, metadataDocument.getValidationState());
         if (submissionEnvelope.flagPossibleMetadataDocumentStateChange(metadataDocument)) {
-            getSubmissionEnvelopeRepository().save(submissionEnvelope);
+            submissionEnvelope = getSubmissionEnvelopeRepository().save(submissionEnvelope);
         }
+        this.analyseStateOfEnvelope(submissionEnvelope)
+                .ifPresent(event1 -> getLog().debug("Event triggered on submission envelope", event1));
     }
 
     private void postMessageIfRequired(SubmissionEnvelope submissionEnvelope, SubmissionState targetState) {

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.humancellatlas.ingest.core.Event;
+import org.humancellatlas.ingest.protocol.Protocol;
 import org.humancellatlas.ingest.state.ValidationState;
 import org.humancellatlas.ingest.core.web.Links;
 import org.humancellatlas.ingest.sample.Sample;
@@ -97,4 +98,22 @@ public class SampleController {
 
         return ResponseEntity.accepted().body(event);
     }
+
+    @RequestMapping(path = "samples/{id}" + Links.DERIVED_SAMPLES_URL, method = RequestMethod.PUT)
+    HttpEntity<?> addDerivedSamples(@PathVariable("id") Sample sample,
+                                    @RequestBody Sample derivedSample,
+                                    final PersistentEntityResourceAssembler assembler) {
+        getSampleService().addNewDerivedSample(derivedSample, sample);
+        PersistentEntityResource resource = assembler.toFullResource(sample);
+        return ResponseEntity.accepted().body(resource);
+    }
+
+    @RequestMapping(path = "samples/{id}" + Links.PROTOCOLS_URL, method = RequestMethod.PUT)
+    HttpEntity<?> addProtocol(@PathVariable("id") Sample sample,
+                              @RequestBody Protocol protocol,
+                              final PersistentEntityResourceAssembler assembler) {
+        PersistentEntityResource resource = assembler.toFullResource(sample);
+        return ResponseEntity.accepted().body(resource);
+    }
+
 }
