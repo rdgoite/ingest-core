@@ -57,7 +57,7 @@ public class MetadataDocumentResourceProcessor implements ResourceProcessor<Reso
             case COMPLETE:
                 return Optional.of(Links.COMPLETE_REL);
             default:
-                // default returns no links (not expecting external user interaction)
+                // default returns no links (not expecting external auth interaction)
                 return Optional.empty();
         }
     }
@@ -75,7 +75,7 @@ public class MetadataDocumentResourceProcessor implements ResourceProcessor<Reso
             case COMPLETE:
                 return Optional.of(Links.COMPLETE_URL);
             default:
-                // default returns no links (not expecting external user interaction)
+                // default returns no links (not expecting external auth interaction)
                 return Optional.empty();
         }
     }

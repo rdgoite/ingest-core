@@ -10,6 +10,10 @@ buildscript {
 	}
 }
 
+plugins {
+	id 'org.sonarqube' version '2.5'
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -29,11 +33,13 @@ dependencies {
 	compile('org.springframework.data:spring-data-rest-hal-browser')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-amqp')
+	compile('org.springframework.boot:spring-boot-starter-security')
 
 	compile('joda-time:joda-time')
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-joda')
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
 	compile('com.fasterxml.jackson.module:jackson-module-parameter-names')
+	compile('io.jsonwebtoken:jjwt:0.7.0')
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
