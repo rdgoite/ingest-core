@@ -99,12 +99,13 @@ public class ProcessService {
             BundleManifest bundleManifest = getBundleManifestRepository().findByBundleUuid(bundleUuid);
             if (bundleManifest != null) {
                 getLog().info(String.format("Adding bundle manifest link to process '%s'", analysis.getId()));
-                resourceLinker.addToRefList(analysis, bundleManifest, "inputBundleManifests");
+                analysis.addInputBundleManifest(bundleManifest);
 
                 // add the input files
                 bundleManifest.getDataFiles().forEach(fileUuid -> {
                     File analysisInputFile = fileRepository.findByUuid(new Uuid(fileUuid));
-                    resourceLinker.addToRefList(analysisInputFile, analysis, "inputToProcesses");
+                    analysisInputFile.addAsInputToProcess(analysis);
+                    fileRepository.save(analysisInputFile);
                 });
             }
             else {
@@ -113,9 +114,7 @@ public class ProcessService {
                         bundleUuid));
             }
         }
-
-
-        return this.getProcessRepository().findOne(analysis.getId());
+        return getProcessRepository().save(analysis);
     }
 
     public Page<Process> findProcessesByInputBundleUuid(UUID bundleUuid, Pageable pageable) {
