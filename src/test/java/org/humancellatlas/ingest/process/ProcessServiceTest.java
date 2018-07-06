@@ -1,6 +1,7 @@
 package org.humancellatlas.ingest.process;
 
 import org.humancellatlas.ingest.biomaterial.BiomaterialRepository;
+import org.humancellatlas.ingest.bundle.BundleManifest;
 import org.humancellatlas.ingest.bundle.BundleManifestRepository;
 import org.humancellatlas.ingest.core.service.ResourceLinker;
 import org.humancellatlas.ingest.file.File;
@@ -9,16 +10,17 @@ import org.humancellatlas.ingest.submission.SubmissionEnvelope;
 import org.humancellatlas.ingest.submission.SubmissionEnvelopeRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -82,7 +84,7 @@ public class ProcessServiceTest {
 
         //and:
         File persistentFile = spy(new File());
-        List<File> persistentFiles = Arrays.asList(persistentFile);
+        List<File> persistentFiles = asList(persistentFile);
         doReturn(persistentFiles).when(fileRepository)
                 .findBySubmissionEnvelopesInAndFileName(submissionEnvelope, fileName);
 
@@ -95,6 +97,33 @@ public class ProcessServiceTest {
         //and:
         verify(persistentFile).addToAnalysis(analysis);
         verify(fileRepository).save(persistentFile);
+    }
+
+    @Test
+    public void testResolveBundleReferencesForProcess() {
+        //given:
+        Process analysis = spy(new Process());
+        String bundleUuid = "7df005b";
+        BundleReference bundleReference = new BundleReference(asList(bundleUuid));
+
+        //and:
+        BundleManifest bundleManifest = new BundleManifest("dee00a1", "cd00aa12", "4600991");
+        doReturn(bundleManifest).when(bundleManifestRepository).findByBundleUuid(bundleUuid);
+
+        //and:
+        Process persistentProcess = mock(Process.class);
+        doReturn(persistentProcess).when(processRepository).save(any(Process.class));
+
+        //when:
+        Process result = service.resolveBundleReferencesForProcess(analysis, bundleReference);
+
+        //then:
+        assertThat(result).isEqualTo(persistentProcess);
+
+        //and:
+        InOrder order = inOrder(analysis, processRepository);
+        order.verify(analysis).addInputBundleManifest(bundleManifest);
+        order.verify(processRepository).save(analysis);
     }
 
     @Configuration

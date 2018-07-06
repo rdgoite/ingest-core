@@ -7,9 +7,7 @@ import org.humancellatlas.ingest.core.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.hateoas.Identifiable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by rolando on 05/09/2017.
@@ -22,11 +20,11 @@ public class BundleManifest implements Identifiable<String> {
     private final String bundleUuid;
     private final String envelopeUuid;
 
-    private final List<String> dataFiles;
-    private final Map<String, Collection<String>> fileBiomaterialMap;
-    private final Map<String, Collection<String>> fileProcessMap;
-    private final Map<String, Collection<String>> fileProjectMap;
-    private final Map<String, Collection<String>> fileProtocolMap;
-    private final Map<String, Collection<String>> fileFilesMap;
+    private final List<String> dataFiles = new ArrayList();
+    private final Map<String, Collection<String>> fileBiomaterialMap = new HashMap<>();
+    private final Map<String, Collection<String>> fileProcessMap = new HashMap<>();
+    private final Map<String, Collection<String>> fileProjectMap = new HashMap<>();
+    private final Map<String, Collection<String>> fileProtocolMap = new HashMap<>();
+    private final Map<String, Collection<String>> fileFilesMap = new HashMap<>();
 
 }
