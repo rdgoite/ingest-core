@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'java'
+    id 'com.google.cloud.tools.jib' version '2.2.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -43,6 +44,17 @@ task verify {
     dependsOn test
     dependsOn integrationTest
     integrationTest.mustRunAfter test
+}
+
+jib {
+    container {
+        creationTime = 'USE_CURRENT_TIMESTAMP'
+        jvmFlags = ['-Djava.security.egd=file:/dev/./urandom']
+        args = ['--spring.data.mongodb.uri=$MONGO_URI',
+                '--spring.rabbitmq.host=$RABBIT_HOST',
+                '--spring.rabbitmq.port=$RABBIT_PORT',
+                '--schema.base-uri=$SCHEMA_BASE_URI']
+    }
 }
 
 dependencies {
